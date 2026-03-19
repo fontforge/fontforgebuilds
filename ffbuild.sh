@@ -155,33 +155,20 @@ BINARY=$BASE/original-archives/binaries/
 RELEASE=$BASE/ReleasePackage/
 DBSYMBOLS=$BASE/debugging-symbols/.debug/
 
-# Determine if we're building 32 or 64 bit.
-if [ "$MSYSTEM" = "MINGW32" ]; then
-    log_note "Building 32-bit version!"
+# Determine if we're building x86 or arm64 bit.
+if [ "$MSYSTEM" = "UCRT64" ]; then
+    log_note "Building x86 64-bit ucrt version!"
 
-    ARCHNUM="32"
-    MINGVER=mingw32
-    MINGOTHER=mingw64
-    HOST="--build=i686-w64-mingw32 --host=i686-w64-mingw32 --target=i686-w64-mingw32"
-    PMARCH=i686
-    PMPREFIX="mingw-w64-$PMARCH"
-elif [ "$MSYSTEM" = "MINGW64" ]; then
-    log_note "Building 64-bit version!"
-
-    ARCHNUM="64"
-    MINGVER=mingw64
-    MINGOTHER=mingw32
-    HOST="--build=x86_64-w64-mingw32 --host=x86_64-w64-mingw32 --target=x86_64-w64-mingw32"
-    PMARCH=x86_64
-    PMPREFIX="mingw-w64-$PMARCH"
-elif [ "$MSYSTEM" = "UCRT64" ]; then
-    log_note "Building 64-bit ucrt version!"
-    
     ARCHNUM="64"
     MINGVER=ucrt64
-    MINGOTHER=mingw32
-    HOST="--build=x86_64-w64-mingw32 --host=x86_64-w64-mingw32 --target=x86_64-w64-mingw32"
     PMARCH=ucrt-x86_64
+    PMPREFIX="mingw-w64-$PMARCH"
+elif [ "$MSYSTEM" = "CLANGARM64" ]; then
+    log_note "Building ARM 64-bit version!"
+
+    ARCHNUM="64"
+    MINGVER=clangarm64
+    PMARCH=clang-aarch64
     PMPREFIX="mingw-w64-$PMARCH"
 else
     bail "Unknown build system!"
@@ -351,18 +338,9 @@ if (( ! $nomake )); then
     log_status "Finished installing prerequisites, attempting to install FontForge!"
     # fontforge
     if (( ! ($appveyor+$ghactions) )) && [ ! -d fontforge ]; then
-            if [ -d "$BASE/work/$MINGOTHER/fontforge" ]; then
-                log_status "Found copy from other arch build, performing local clone..."
-                # Don't use git clone - need the remotes for updating
-                cp -r "$BASE/work/$MINGOTHER/fontforge" . || bail "Local clone failed"
-                cd "fontforge"
-                git clean -dxf || bail "Could not clean repository"
-                git reset --hard || bail "Could not reset repository"
-            else
-                log_status "Cloning the fontforge repository from https://github.com/$github/fontforge..."
-                git clone "https://github.com/$github/fontforge" || bail "Cloning fontforge"
-                cd "fontforge"
-            fi
+        log_status "Cloning the fontforge repository from https://github.com/$github/fontforge..."
+        git clone "https://github.com/$github/fontforge" || bail "Cloning fontforge"
+        cd "fontforge"
     else
         cd "$FFPATH";
     fi
