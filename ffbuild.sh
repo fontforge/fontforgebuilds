@@ -162,18 +162,16 @@ if [ "$MSYSTEM" = "UCRT64" ]; then
     ARCHNUM="64"
     MINGVER=ucrt64
     PMARCH=ucrt-x86_64
-    PMPREFIX="mingw-w64-$PMARCH"
 elif [ "$MSYSTEM" = "CLANGARM64" ]; then
     log_note "Building ARM 64-bit version!"
 
     ARCHNUM="64"
     MINGVER=clangarm64
     PMARCH=clang-aarch64
-    PMPREFIX="mingw-w64-$PMARCH"
 else
     bail "Unknown build system!"
 fi
-export PMPREFIX
+export PMPREFIX="mingw-w64-$PMARCH"
 
 # Early detection
 detect_arch_switch $MINGVER

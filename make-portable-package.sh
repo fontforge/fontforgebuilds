@@ -49,22 +49,24 @@ else
     postfix="$1"
 fi
 
-if [ "$MSYSTEM" = "MINGW32" ]; then
-    ARCH="32"
-    PKGPREFIX="FontForge-mingw-w64-i686"
+if [ "$MSYSTEM" = "UCRT64" ]; then
+    MINGVER=ucrt64
+    PMARCH=ucrt-x86_64
+elif [ "$MSYSTEM" = "CLANGARM64" ]; then
+    MINGVER=clangarm64
+    PMARCH=clang-aarch64
 else
-    ARCH="64"
-    PKGPREFIX="FontForge-mingw-w64-x86_64"
+    bail "Unknown build system!"
 fi
+PKGPREFIX="FontForge-mingw-w64-$PMARCH"
 
-MINGVER=mingw$ARCH
 BASE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SETUP=$BASE/fontforge-setup
 WORK=$BASE/work/$MINGVER/
 RELEASE=$BASE/ReleasePackage/
 DEBUG=$BASE/debugging-symbols/
 
-log_note "Packaging $ARCH-bit release..."
+log_note "Packaging $MINGVER release..."
 pacman -S --noconfirm --needed p7zip > /dev/null 2>&1 
 
 if [ -z "$FFPATH" ]; then
