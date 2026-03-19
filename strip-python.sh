@@ -6,15 +6,9 @@ set -eo pipefail
 
 export LC_ALL=C
 
-if [ "$MSYSTEM" == "MINGW32" ]; then
-    PACKAGE=mingw-w64-i686-python
-    PIP_PACKAGE=mingw-w64-i686-python-pip
-    SETUPTOOLS_PACKAGE=mingw-w64-i686-python-setuptools
-else
-    PACKAGE=mingw-w64-x86_64-python
-    PIP_PACKAGE=mingw-w64-x86_64-python-pip
-    SETUPTOOLS_PACKAGE=mingw-w64-x86_64-python-setuptools
-fi
+PACKAGE=$PMPREFIX-python
+PIP_PACKAGE=$PMPREFIX-python-pip
+SETUPTOOLS_PACKAGE=$PMPREFIX-python-setuptools
 
 #PYNAME=$(pacman -Qi $PACKAGE | grep -m1 Name | cut -d':' -f2 | xargs) # only needed for the python3 transition to default
 PYNAME="$PACKAGE"

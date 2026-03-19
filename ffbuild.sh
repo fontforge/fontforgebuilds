@@ -173,6 +173,7 @@ elif [ "$MSYSTEM" = "CLANGARM64" ]; then
 else
     bail "Unknown build system!"
 fi
+export PMPREFIX
 
 # Early detection
 detect_arch_switch $MINGVER
