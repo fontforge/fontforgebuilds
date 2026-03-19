@@ -457,7 +457,7 @@ fi
 
 
 log_status "Installing run_fontforge..."
-objcopy -S --file-alignment 1024 $WORK/run_fontforge/run_fontforge.exe "$RELEASE/run_fontforge.exe" \
+strip $WORK/run_fontforge/run_fontforge.exe -so "$RELEASE/run_fontforge.exe" \
     || bail "run_fontforge"
 
 log_status "Copying UI fonts..."
