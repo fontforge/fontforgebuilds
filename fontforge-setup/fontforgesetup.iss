@@ -11,19 +11,21 @@
 #define MyInstallEpoch "1"
 
 #ifdef MSYSTEM
-# if MSYSTEM == "MINGW64"
-#  define ARCH="x64"
+# if MSYSTEM == "UCRT64"
+#  define ARCH="x64compatible"
 #  define ARCHDESC="x64"
-#  define ARCHBITS="64"
-#  define OTHERBITS="32"
+# endif
+# if MSYSTEM == "CLANGARM64"
+#  define ARCH="arm64"
+#  define ARCHDESC="arm64"
 # endif
 #endif
 #ifndef ARCH
-# define ARCH=""
-# define ARCHDESC="x86"
-# define ARCHBITS="32"
-# define OTHERBITS="64"
+# define ARCH="x64"
+# define ARCHDESC="x64_unknown"
 #endif
+#define ARCHBITS="64"
+#define OTHERBITS="32"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
